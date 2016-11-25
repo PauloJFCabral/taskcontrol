@@ -18,7 +18,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'status')->dropDownList(['open' => 'Open','work' => 'Work in Progressing','pending'=>'Pending','resolved' => 'Resolved','closed' => 'Closed']) ?>
 
-    <?= $form->field($model, 'finish_time')->textInput() ?>
+    <?= $form->field($model, 'finish_time')->widget(\yii\jui\DatePicker::classname(), [
+        'language' => 'pt',
+    //'dateFormat' => 'yyyy-MM-dd',
+]) ?> ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
