@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Task;
+use app\models\TaskChild;
 use app\models\TaskSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,14 +65,28 @@ class TaskController extends Controller
     public function actionCreate()
     {
         $model = new Task();
+        $taskChild = new TaskChild();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->created_time = date();
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $taskChild->load(Yii::$app->request->post())) {
+            
+            $model->created_time = date('Y-m-d');
+            
+            
+            if($model->validate() && $taskChild->validate() && $model->save()){
+                $taskChild->child_id = $model->id;
+                
+                return $this->redirect(['index']);
+            }
+                
+            else
+                return $this->render('create', [
+                    'model' => $model,
+                    'taskChild' => $taskChild,
+                ]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'taskChild' => $taskChild,
+                'model'=>$model,
             ]);
         }
     }
@@ -86,8 +101,10 @@ class TaskController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_time = date('Y-m-d');
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,

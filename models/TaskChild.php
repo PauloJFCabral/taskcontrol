@@ -26,7 +26,7 @@ class TaskChild extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'child_id'], 'required'],
+           // [['parent_id', 'child_id'], 'required'],
             [['parent_id', 'child_id'], 'integer'],
         ];
     }
